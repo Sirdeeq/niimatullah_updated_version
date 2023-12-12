@@ -20,7 +20,7 @@ export const updateUser = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
-        ₦set: {
+        $set: {
           username: req.body.username,
           email: req.body.email,
           password: req.body.password,
