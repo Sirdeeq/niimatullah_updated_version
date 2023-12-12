@@ -71,7 +71,7 @@ export default function CreateListing() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ₦{progress}% done`);
+          console.log(`Upload is ${progress}% done`);
         },
         (error) => {
           reject(error);
@@ -147,7 +147,7 @@ export default function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
-      navigate(`/listing/₦{data._id}`);
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -282,7 +282,7 @@ export default function CreateListing() {
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
                 {formData.type === "rent" && (
-                  <span className="text-xs">(₦ / month)</span>
+                  <span className="text-xs">($ / month)</span>
                 )}
               </div>
             </div>
@@ -302,7 +302,7 @@ export default function CreateListing() {
                   <p>Discounted price</p>
 
                   {formData.type === "rent" && (
-                    <span className="text-xs">(₦ / month)</span>
+                    <span className="text-xs">($ / month)</span>
                   )}
                 </div>
               </div>

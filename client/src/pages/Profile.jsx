@@ -74,7 +74,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/₦{currentUser._id}`, {
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -97,7 +97,7 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/₦{currentUser._id}`, {
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE"
       });
       const data = await res.json();
@@ -129,7 +129,7 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`/api/user/listings/₦{currentUser._id}`);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
@@ -144,7 +144,7 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`/api/listing/delete/₦{listingId}`, {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
         method: "DELETE"
       });
       const data = await res.json();
@@ -183,7 +183,7 @@ export default function Profile() {
               Error Image upload (image must be less than 2 mb)
             </span>
           ) : filePerc > 0 && filePerc < 100 ? (
-            <span className="text-slate-700">{`Uploading ₦{filePerc}%`}</span>
+            <span className="text-slate-700">{`Uploading ${filePerc}%`}</span>
           ) : filePerc === 100 ? (
             <span className="text-green-700">Image successfully uploaded!</span>
           ) : (
@@ -259,7 +259,7 @@ export default function Profile() {
               key={listing._id}
               className="border rounded-lg p-3 flex justify-between items-center gap-4"
             >
-              <Link to={`/listing/₦{listing._id}`}>
+              <Link to={`/listing/${listing._id}`}>
                 <img
                   src={listing.imageUrls[0]}
                   alt="listing cover"
@@ -268,7 +268,7 @@ export default function Profile() {
               </Link>
               <Link
                 className="text-slate-700 font-semibold  hover:underline truncate flex-1"
-                to={`/listing/₦{listing._id}`}
+                to={`/listing/${listing._id}`}
               >
                 <p>{listing.name}</p>
               </Link>
@@ -280,7 +280,7 @@ export default function Profile() {
                 >
                   Delete
                 </button>
-                <Link to={`/update-listing/₦{listing._id}`}>
+                <Link to={`/update-listing/${listing._id}`}>
                   <button className="text-green-700 uppercase">Edit</button>
                 </Link>
               </div>

@@ -36,7 +36,7 @@ export default function CreateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res = await fetch(`/api/listing/get/₦{listingId}`);
+      const res = await fetch(`/api/listing/get/${listingId}`);
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
@@ -87,7 +87,7 @@ export default function CreateListing() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ₦{progress}% done`);
+          console.log(`Upload is ${progress}% done`);
         },
         (error) => {
           reject(error);
@@ -148,7 +148,7 @@ export default function CreateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch(`/api/listing/update/₦{params.listingId}`, {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -163,7 +163,7 @@ export default function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
-      navigate(`/listing/₦{data._id}`);
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -298,7 +298,7 @@ export default function CreateListing() {
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
                 {formData.type === "rent" && (
-                  <span className="text-xs">(₦ / month)</span>
+                  <span className="text-xs">($ / month)</span>
                 )}
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function CreateListing() {
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>
                   {formData.type === "rent" && (
-                    <span className="text-xs">(₦ / month)</span>
+                    <span className="text-xs">($ / month)</span>
                   )}
                 </div>
               </div>
