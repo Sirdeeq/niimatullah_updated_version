@@ -3,6 +3,12 @@ import { errorHandler } from "../utils/error.js";
 
 export const createListing = async (req, res, next) => {
   try {
+    if (req.user.role !== "admin") {
+      return next(
+        errorHandler(403, "You are not authorized to create listings!")
+      );
+    }
+
     const listing = await Listing.create(req.body);
     return res.status(201).json(listing);
   } catch (error) {
@@ -17,8 +23,13 @@ export const deleteListing = async (req, res, next) => {
     return next(errorHandler(404, "Listing not found!"));
   }
 
-  if (req.user.id !== listing.userRef) {
-    return next(errorHandler(401, "You can only delete your own listings!"));
+  if (req.user.role !== "admin" && req.user.id !== listing.userRef) {
+    return next(
+      errorHandler(
+        401,
+        "You can only delete your own listings or you are not authorized as an admin!"
+      )
+    );
   }
 
   try {
@@ -34,8 +45,14 @@ export const updateListing = async (req, res, next) => {
   if (!listing) {
     return next(errorHandler(404, "Listing not found!"));
   }
-  if (req.user.id !== listing.userRef) {
-    return next(errorHandler(401, "You can only update your own listings!"));
+
+  if (req.user.role !== "admin" && req.user.id !== listing.userRef) {
+    return next(
+      errorHandler(
+        401,
+        "You can only update your own listings or you are not authorized as an admin!"
+      )
+    );
   }
 
   try {
