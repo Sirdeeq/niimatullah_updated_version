@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaWhatsapp, FaEnvelope, FaPhone } from "react-icons/fa"; // Import icons for WhatsApp, email, and phone
+import { FaWhatsapp, FaEnvelope, FaPhone } from "react-icons/fa";
 
 export default function Contact({ listing }) {
   const [landlord, setLandlord] = useState(null);
@@ -18,11 +18,8 @@ export default function Contact({ listing }) {
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000http://localhost:3000http://localhost:3000/api/user/${listing.userRef}`
-        );
+        const res = await fetch(`/api/user/${listing.userRef}`);
         const data = await res.json();
-        console.log(data);
         setLandlord(data);
       } catch (error) {
         console.log(error);
@@ -31,11 +28,9 @@ export default function Contact({ listing }) {
     fetchLandlord();
   }, [listing.userRef]);
 
-  const handleWhatsAppClick = () => {
-    // Prompt the user to enter the country code
+  const handleWhatsAppClick = async () => {
     const countryCode = prompt("Please enter the country code:");
 
-    // Validate that the country code is entered
     if (!countryCode) {
       alert("Country code is required.");
       return;
@@ -45,27 +40,27 @@ export default function Contact({ listing }) {
       `Regarding ${listing.name}: ${message}`
     );
 
-    // Include the country code in the WhatsApp link
     const whatsappLink = `https://wa.me/${countryCode}${landlord.phone_number}?text=${whatsappMessage}`;
 
-    // Open the WhatsApp link in a new tab
-    const whatsappWindow = window.open(whatsappLink, "_blank");
+    try {
+      // Use window.open to open a new tab
+      const whatsappWindow = window.open(whatsappLink, "_blank");
 
-    // Check if the new tab is opened successfully
-    if (whatsappWindow) {
-      // Handle the case when the message is sent successfully
-      const checkInterval = setInterval(() => {
-        if (whatsappWindow.closed) {
-          // WhatsApp window is closed, assume the message was sent successfully
-          clearInterval(checkInterval);
-          alert("Message sent successfully!");
-          // Clear the input
-          setMessage("");
-        }
-      }, 1000);
-    } else {
-      // Handle the case when the new tab could not be opened
-      alert("Failed to open WhatsApp. Please try again.");
+      if (whatsappWindow) {
+        // Poll the window until it's closed
+        const checkInterval = setInterval(() => {
+          if (whatsappWindow.closed) {
+            clearInterval(checkInterval);
+            alert("Message sent successfully!");
+            setMessage("");
+          }
+        }, 1000);
+      } else {
+        alert("Failed to open WhatsApp. Please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("An error occurred. Please try again.");
     }
   };
 
