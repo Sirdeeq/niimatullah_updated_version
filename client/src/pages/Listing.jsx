@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { useSelector } from "react-redux";
@@ -15,8 +15,6 @@ import {
   FaShare
 } from "react-icons/fa";
 import Contact from "../components/Contact";
-
-// https://sabe.io/blog/javascript-format-numbers-commas#:~:text=The%20best%20way%20to%20format,format%20the%20number%20with%20commas.
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -136,15 +134,31 @@ export default function Listing() {
                 {listing.furnished ? "Complete" : "Not-Complete"}
               </li>
             </ul>
-            {currentUser && listing.userRef !== currentUser._id && !contact && (
-              <button
-                onClick={() => setContact(true)}
-                className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
-              >
-                Contact landlord
-              </button>
+            {currentUser ? (
+              <>
+                {listing.userRef !== currentUser._id && !contact && (
+                  <button
+                    onClick={() => setContact(true)}
+                    className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
+                  >
+                    Contact Landlord
+                  </button>
+                )}
+                {contact && <Contact listing={listing} />}
+              </>
+            ) : (
+              <p className="text-slate-800 mt-4">
+                Please{" "}
+                <Link to="/sign-in" className="text-slate-700 font-semibold">
+                  Log in
+                </Link>{" "}
+                or{" "}
+                <Link to="/sign-up" className="text-slate-700 font-semibold">
+                  Sign up
+                </Link>{" "}
+                to contact the landlord.
+              </p>
             )}
-            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}
