@@ -154,7 +154,7 @@ export default function Listing() {
                 </Link>{" "}
                 or{" "}
                 <Link to="/sign-up" className="text-slate-700 font-semibold">
-                  Sign up
+                  S ign up
                 </Link>{" "}
                 to contact the landlord.
               </p>

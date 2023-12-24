@@ -5,6 +5,7 @@ import { Navigation } from "swiper/modules";
 import SwiperCore from "swiper";
 import "swiper/css/bundle";
 import ListingItem from "../components/ListingItem";
+import logo from "../assets/imgs/logo.png";
 
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
@@ -40,7 +41,7 @@ export default function Home() {
         const data = await res.json();
         setSaleListings(data);
       } catch (error) {
-        log(error);
+        console.log(error);
       }
     };
     fetchOfferListings();
@@ -48,28 +49,52 @@ export default function Home() {
   return (
     <div>
       {/* top */}
-      <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
-        <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find your next <span className="text-slate-500">perfect</span>
+      <div
+        className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto md:flex-row md:items-center bg-sky-900"
+        // style={{
+        //   backgroundImage: `url(${logo})`,
+        //   backgroundRepeat: "no-repeat",
+        //   backgroundSize: "cover"
+        // }}
+      >
+        <div className="md:w-5/12">
+          <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
+            <span className="text-slate-200">Effortless Elegance</span>
+          </h1>
           <br />
-          place with ease
-        </h1>
-        <div className="text-gray-400 text-xs sm:text-sm">
-          NIIMATULLAH REALESTATE is the best place to find your next perfect
-          place to live.
-          <br />
-          We have a wide range of properties for you to choose from.
+          <div className="text-gray-400 text-xs sm:text-sm">
+            Discover your ideal home with diverse property options at
+            NIIMATULLAH REALESTATE.
+          </div>
+          <Link
+            to={"/search"}
+            className="text-xs sm:text-sm text-blue-900 font-bold hover:underline"
+          >
+            Let's get started...
+          </Link>
         </div>
-        <Link
-          to={"/search"}
-          className="text-xs sm:text-sm text-blue-800 font-bold hover:underline"
-        >
-          Let's get started...
-        </Link>
+        <div className="md:w-7/12">
+          {/* swiper */}
+          <Swiper navigation>
+            {offerListings &&
+              offerListings.length > 0 &&
+              offerListings.map((listing) => (
+                <SwiperSlide key={listing._id}>
+                  <div
+                    style={{
+                      background: `url(${listing.imageUrls[0]}) center no-repeat`,
+                      backgroundSize: "cover"
+                    }}
+                    className="h-[500px]"
+                  ></div>
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        </div>
       </div>
 
       {/* swiper */}
-      <Swiper navigation>
+      {/* <Swiper navigation>
         {offerListings &&
           offerListings.length > 0 &&
           offerListings.map((listing) => (
@@ -84,7 +109,7 @@ export default function Home() {
               ></div>
             </SwiperSlide>
           ))}
-      </Swiper>
+      </Swiper> */}
 
       {/* listing results for offer, sale and rent */}
 
