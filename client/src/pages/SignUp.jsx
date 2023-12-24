@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import OAuth from "../components/OAuth";
 
 export default function SignUp() {
@@ -7,12 +9,21 @@ export default function SignUp() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value
     });
   };
+
+  const handlePhoneChange = (value) => {
+    setFormData({
+      ...formData,
+      phone_number: value
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -39,55 +50,58 @@ export default function SignUp() {
       setError(error.message);
     }
   };
+
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="usermane"
-          className="border p-3 rounded-lg"
-          id="username"
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          placeholder="email"
-          className="border p-3 rounded-lg"
-          id="email"
-          onChange={handleChange}
-        />
-        <input
-          type="tel"
-          placeholder="phone number"
-          className="border p-3 rounded-lg"
-          id="phone_number"
-          onChange={handleChange}
-        />
-
-        <input
-          type="password"
-          placeholder="password"
-          className="border p-3 rounded-lg"
-          id="password"
-          onChange={handleChange}
-        />
-
-        <button
-          disabled={loading}
-          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
-        >
-          {loading ? "Loading..." : "Sign Up"}
-        </button>
-        <OAuth />
-      </form>
-      <div className="flex gap-2 mt-5">
-        <p>Have an account?</p>
-        <Link to={"/sign-in"}>
-          <span className="text-blue-700">Sign in</span>
-        </Link>
+    <>
+      <br />
+      <div className=" items-center justify-center min-h-screen">
+        <div className="p-3 max-w-md mx-auto bg-white shadow-lg rounded-lg">
+          <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Username"
+              className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+              id="username"
+              onChange={handleChange}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+              id="email"
+              onChange={handleChange}
+            />
+            <PhoneInput
+              placeholder="Phone Number"
+              value={formData.phone_number}
+              onChange={handlePhoneChange}
+              className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+              id="password"
+              onChange={handleChange}
+            />
+            <button
+              disabled={loading}
+              className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800 disabled:opacity-80 transition"
+            >
+              {loading ? "Loading..." : "Sign Up"}
+            </button>
+            <OAuth />
+          </form>
+          <div className="flex items-center justify-between mt-5">
+            <p className="text-gray-500">Already have an account?</p>
+            <Link to="/sign-in" className="text-blue-700 hover:underline">
+              Sign in
+            </Link>
+          </div>
+          {error && <p className="text-red-500 mt-5">{error}</p>}
+        </div>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
-    </div>
+    </>
   );
 }
