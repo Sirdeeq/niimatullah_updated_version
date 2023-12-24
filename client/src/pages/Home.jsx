@@ -50,7 +50,7 @@ export default function Home() {
     <div>
       {/* top */}
       <div
-        className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto md:flex-row md:items-center bg-sky-900"
+        className="flex flex-col gap-6 p-28 px-3  mx-auto md:flex-row md:items-center bg-sky-900"
         // style={{
         //   backgroundImage: `url(${logo})`,
         //   backgroundRepeat: "no-repeat",
