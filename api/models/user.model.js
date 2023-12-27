@@ -16,10 +16,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    phone_number: {
-      type: String,
-      required: true
-    },
     avatar: {
       type: String,
       default:
@@ -28,6 +24,9 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       default: "user"
+    },
+    phone_number: {
+      type: String
     }
   },
   { timestamps: true }

@@ -10,61 +10,44 @@ export const test = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id)
+  if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can only update your own account!"));
+  }
+
   try {
+    // Log the request body in the console
+    console.log("Request Body:", req.body);
+
+    const updateFields = {
+      username: req.body.username,
+      email: req.body.email,
+      avatar: req.body.avatar
+    };
+
+    // Update password if provided
     if (req.body.password) {
-      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+      updateFields.password = bcryptjs.hashSync(req.body.password, 10);
+    }
+
+    // Update phoneNumber if provided
+    if (req.body.phone_number) {
+      updateFields.phone_number = req.body.phone_number;
+    }
+
+    // Update role if provided and user is an admin
+    if (req.body.role && req.user.role === "admin") {
+      updateFields.role = req.body.role;
     }
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          avatar: req.body.avatar,
-          phone_number: req.body.phone_number,
-          role: req.body.role
-        }
-      },
+      { $set: updateFields },
       { new: true }
     );
 
     const { password, ...rest } = updatedUser._doc;
 
     res.status(200).json(rest);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getUser = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.id);
-
-    if (!user) return next(errorHandler(404, "User not found!"));
-
-    const { password, ...rest } = user._doc;
-
-    res.status(200).json(rest);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getUsersForAdmin = async (req, res, next) => {
-  try {
-    if (req.user.role !== "admin") {
-      return next(
-        errorHandler(403, "You are not authorized to access this resource!")
-      );
-    }
-
-    const users = await User.find({}, { password: 0 }); // Exclude password field
-
-    res.status(200).json(users);
   } catch (error) {
     next(error);
   }
@@ -83,21 +66,27 @@ export const deleteUser = async (req, res, next) => {
 };
 
 export const getUserListings = async (req, res, next) => {
-  try {
-    const requestedUserId = req.params.id;
-    const loggedInUserId = req.user.id;
-
-    if (req.user.role === "admin" || requestedUserId === loggedInUserId) {
-      const listings = await Listing.find({ userRef: requestedUserId });
+  if (req.user.id === req.params.id) {
+    try {
+      const listings = await Listing.find({ userRef: req.params.id });
       res.status(200).json(listings);
-    } else {
-      return next(
-        errorHandler(
-          401,
-          "You can only view your own listings or you are not authorized as an admin!"
-        )
-      );
+    } catch (error) {
+      next(error);
     }
+  } else {
+    return next(errorHandler(401, "You can only view your own listings!"));
+  }
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) return next(errorHandler(404, "User not found!"));
+
+    const { password: pass, ...rest } = user._doc;
+
+    res.status(200).json(rest);
   } catch (error) {
     next(error);
   }

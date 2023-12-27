@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { FaWhatsapp, FaEnvelope, FaPhone } from "react-icons/fa";
+import {
+  FaWhatsapp,
+  FaEnvelope,
+  FaPhone,
+  FaFacebook,
+  FaInstagram
+} from "react-icons/fa";
 
 export default function Contact({ listing }) {
   const [landlord, setLandlord] = useState(null);
   const [message, setMessage] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
 
   const onChange = (e) => {
     setMessage(e.target.value);
-  };
-
-  const onPhoneNumberChange = (e) => {
-    setPhoneNumber(e.target.value);
   };
 
   useEffect(() => {
@@ -20,6 +20,7 @@ export default function Contact({ listing }) {
       try {
         const res = await fetch(`/api/user/${listing.userRef}`);
         const data = await res.json();
+        console.log(data);
         setLandlord(data);
       } catch (error) {
         console.log(error);
@@ -28,51 +29,57 @@ export default function Contact({ listing }) {
     fetchLandlord();
   }, [listing.userRef]);
 
-  const handleWhatsAppClick = async () => {
-    const countryCode = prompt("Please enter the country code:");
-
-    if (!countryCode) {
-      alert("Country code is required.");
-      return;
+  const openLink = (link) => {
+    try {
+      window.open(link, "_blank");
+    } catch (error) {
+      console.log(error);
+      alert(`Failed to open link. Please try again.`);
     }
+  };
 
+  const handleWhatsAppClick = async () => {
     const whatsappMessage = encodeURIComponent(
       `Regarding ${listing.name}: ${message}`
     );
 
-    const whatsappLink = `https://wa.me/${countryCode}${landlord.phone_number}?text=${whatsappMessage}`;
+    const whatsappLink = `https://wa.me/${landlord.phone_number}?text=${whatsappMessage}`;
 
     try {
-      // Use window.open to open a new tab
-      const whatsappWindow = window.open(whatsappLink, "_blank");
-
-      if (whatsappWindow) {
-        // Poll the window until it's closed
-        const checkInterval = setInterval(() => {
-          if (whatsappWindow.closed) {
-            clearInterval(checkInterval);
-            alert("Message sent successfully!");
-            setMessage("");
-          }
-        }, 1000);
-      } else {
-        alert("Failed to open WhatsApp. Please try again.");
-      }
+      window.open(whatsappLink, "_blank");
     } catch (error) {
       console.log(error);
-      alert("An error occurred. Please try again.");
+      alert("Failed to open WhatsApp. Please try again.");
     }
   };
 
   const handleEmailClick = () => {
     const emailSubject = encodeURIComponent(`Regarding ${listing.name}`);
     const emailLink = `mailto:${landlord.email}?subject=${emailSubject}&body=${message}`;
-    window.location.href = emailLink;
+    openLink(emailLink);
   };
 
   const handlePhoneCallClick = () => {
     window.location.href = `tel:${landlord.phone_number}`;
   };
+
+  // const handleFacebookClick = () => {
+  //   if (landlord.facebookUsername) {
+  //     const facebookLink = `https://www.facebook.com/${landlord.facebookUsername}`;
+  //     openLink(facebookLink);
+  //   } else {
+  //     alert("Landlord's Facebook username is not available.");
+  //   }
+  // };
+
+  // const handleInstagramClick = () => {
+  //   if (landlord.instagramUsername) {
+  //     const instagramLink = `https://www.instagram.com/${landlord.instagramUsername}`;
+  //     openLink(instagramLink);
+  //   } else {
+  //     alert("Landlord's Instagram username is not available.");
+  //   }
+  // };
 
   return (
     <>
@@ -96,29 +103,37 @@ export default function Contact({ listing }) {
             placeholder="Enter your message here..."
             className="w-full border p-3 rounded-lg"
           ></textarea>
-
           <div className="flex gap-2">
             <button
               onClick={handleEmailClick}
-              className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
+              className="bg-blue-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
             >
-              <FaEnvelope className="inline-block mr-2" />
-              Email
+              <FaEnvelope className="inline-block" size={30} />
             </button>
             <button
               onClick={handleWhatsAppClick}
-              className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
+              className="bg-green-400 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
             >
-              <FaWhatsapp className="inline-block mr-2" />
-              WhatsApp
+              <FaWhatsapp className="inline-block" size={30} />
             </button>
             <button
               onClick={handlePhoneCallClick}
               className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
             >
-              <FaPhone className="inline-block mr-2" />
-              Phone Call
+              <FaPhone className="inline-block" size={30} />
             </button>
+            {/* <button
+              onClick={handleFacebookClick}
+              className="bg-blue-800 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
+            >
+              <FaFacebook className="inline-block" size={30} />
+            </button>
+            <button
+              onClick={handleInstagramClick}
+              className="bg-pink-500 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
+            >
+              <FaInstagram className="inline-block" size={30} />
+            </button> */}
           </div>
         </div>
       )}

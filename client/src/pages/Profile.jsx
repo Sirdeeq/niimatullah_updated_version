@@ -18,6 +18,8 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import PhoneInput from "react-phone-number-input";
+import "./profile.css";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -117,7 +119,7 @@ export default function Profile() {
       }
       dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(deleteUserFailure(data.message));
+      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -156,6 +158,7 @@ export default function Profile() {
     }
   };
 
+  console.log(currentUser.role);
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -209,23 +212,40 @@ export default function Profile() {
           id="password"
           className="border p-3 rounded-lg"
         />
-        <input
-          type="text"
+        <PhoneInput
           placeholder="Phone Number"
           id="phone_number"
-          defaultValue={currentUser.phone_number}
+          value={formData.phone_number || currentUser.phone_number}
           className="border p-3 rounded-lg"
-          onChange={handleChange}
+          onChange={(value) =>
+            setFormData({ ...formData, phone_number: value })
+          }
         />
-        <select
-          id="role"
-          className="border p-3 rounded-lg"
-          value={formData.role || currentUser.role}
-          onChange={handleChange}
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
+        <div className="wrapper">
+          <input
+            type="radio"
+            name="role"
+            id="admin"
+            checked={formData.role === "admin" || currentUser.role === "admin"}
+            onChange={handleChange}
+          />
+          <input
+            type="radio"
+            name="role"
+            id="user"
+            checked={formData.role === "user" || currentUser.role === "user"}
+            onChange={handleChange}
+          />
+          <label htmlFor="admin" className="option option-admin">
+            <div className="dot"></div>
+            <span>Admin</span>
+          </label>
+          <label htmlFor="user" className="option option-user">
+            <div className="dot"></div>
+            <span>User</span>
+          </label>
+        </div>
+
         <button
           disabled={loading}
           className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
@@ -278,42 +298,45 @@ export default function Profile() {
         </p>
       )}
       {userListings && userListings.length > 0 && (
-        <div className="flex flex-col gap-4">
-          <h1 className="text-center mt-7 text-2xl font-semibold">
-            Your Listings
-          </h1>
-          {userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className="border rounded-lg p-3 flex justify-between items-center gap-4"
-            >
-              <Link to={`/listing/${listing._id}`}>
-                <img
-                  src={listing.imageUrls[0]}
-                  alt="listing cover"
-                  className="h-16 w-16 object-contain"
-                />
-              </Link>
-              <Link
-                className="text-slate-700 font-semibold  hover:underline truncate flex-1"
-                to={`/listing/${listing._id}`}
-              >
-                <p>{listing.name}</p>
-              </Link>
-
-              <div className="flex flex-col item-center">
-                <button
-                  onClick={() => handleListingDelete(listing._id)}
-                  className="text-red-700 uppercase"
-                >
-                  Delete
-                </button>
-                <Link to={`/update-listing/${listing._id}`}>
-                  <button className="text-green-700 uppercase">Edit</button>
-                </Link>
-              </div>
-            </div>
-          ))}
+        <div className="mt-7">
+          <h1 className="text-2xl font-semibold mb-4">Your Listings</h1>
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">Listing Image</th>
+                <th className="py-2 px-4 border-b">Listing Name</th>
+                <th className="py-2 px-4 border-b">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userListings.map((listing) => (
+                <tr key={listing._id} className="hover:bg-gray-100">
+                  <td className="py-2 px-4 border-b">
+                    <img
+                      src={listing.imageUrls[0]}
+                      alt="listing cover"
+                      className="h-16 w-16 object-contain"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">{listing.name}</td>
+                  <td className="py-2 px-4 border-b">
+                    <Link
+                      to={`/update-listing/${listing._id}`}
+                      className="text-green-700 mr-2"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleListingDelete(listing._id)}
+                      className="text-red-700"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

@@ -73,6 +73,7 @@ export default function SignUp() {
               onChange={handleChange}
             />
             <PhoneInput
+            type="tel"
               placeholder="Phone Number"
               value={formData.phone_number}
               onChange={handlePhoneChange}
