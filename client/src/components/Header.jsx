@@ -1,4 +1,4 @@
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import logo from "../assets/imgs/logo.png";
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -25,6 +26,10 @@ export default function Header() {
     }
   }, [location.search]);
 
+  const toggleNav = () => {
+    setIsNavOpen(!isNavOpen);
+  };
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -33,10 +38,11 @@ export default function Header() {
             <img src={logo} width={200} alt="logo" />
           </h1>
         </Link>
-        &nbsp; &nbsp;
         <form
           onSubmit={handleSubmit}
-          className="bg-slate-100 p-3 rounded-lg flex items-center flex-grow"
+          className={`${
+            isNavOpen ? "hidden" : "flex"
+          } sm:flex bg-slate-100 p-3 rounded-lg items-center ml-3 flex-grow mt-4 sm:mt-0`}
         >
           <input
             type="text"
@@ -49,17 +55,23 @@ export default function Header() {
             <FaSearch className="text-slate-600" />
           </button>
         </form>
-        &nbsp; &nbsp;
-        <ul className="flex gap-4">
+        <button className="sm:hidden " onClick={toggleNav}>
+          {isNavOpen ? (
+            <FaTimes className="text-slate-600 " size={30} />
+          ) : (
+            <FaBars className="text-slate-600 mt-3 ml-2" size={30} />
+          )}
+        </button>
+        <ul
+          className={`${
+            isNavOpen ? "flex flex-col mt-4" : "hidden"
+          } sm:flex gap-4 items-center`}
+        >
           <Link to="/">
-            <li className="hidden sm:inline text-slate-700 hover:underline">
-              Home
-            </li>
+            <li className="text-slate-700 hover:underline">Home</li>
           </Link>
           <Link to="/about">
-            <li className="hidden sm:inline text-slate-700 hover:underline">
-              About
-            </li>
+            <li className="text-slate-700 hover:underline">About</li>
           </Link>
           <Link to="/profile">
             {currentUser ? (
@@ -69,7 +81,7 @@ export default function Header() {
                 alt="profile"
               />
             ) : (
-              <li className=" text-slate-700 hover:underline"> Sign in</li>
+              <li className="text-slate-700 hover:underline">Sign in</li>
             )}
           </Link>
         </ul>
