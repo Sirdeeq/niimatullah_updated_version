@@ -158,7 +158,7 @@ export default function Profile() {
     }
   };
 
-  console.log(currentUser.role);
+  console.log(currentUser);
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -222,13 +222,13 @@ export default function Profile() {
           }
         />
         <div className="wrapper">
-          <input
+          {/* <input
             type="radio"
             name="role"
             id="admin"
             checked={formData.role === "admin" || currentUser.role === "admin"}
             onChange={handleChange}
-          />
+          /> */}
           <input
             type="radio"
             name="role"
