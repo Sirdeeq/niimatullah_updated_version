@@ -46,47 +46,47 @@ export default function SignIn() {
   };
 
   return (
-  <>
-  <br />
-  <br />
-  <br />
-  <br />
-    <div className="items-center justify-center min-h-screen">
-      <div className="p-3 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
-        <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Username"
-            className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-            id="email"
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-            id="password"
-            onChange={handleChange}
-          />
+    <>
+      <br />
+      <br />
+      <br />
+      <br />
+      <div className="items-center justify-center min-h-screen">
+        <div className="p-3 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
+          <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Username"
+              className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+              id="email"
+              onChange={handleChange}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              className="border p-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+              id="password"
+              onChange={handleChange}
+            />
 
-          <button
-            disabled={loading}
-            className="bg-blue-700 text-white p-3 rounded-lg uppercase hover:bg-blue-800 disabled:opacity-80 transition"
-          >
-            {loading ? "Loading..." : "Sign In"}
-          </button>
-          <OAuth />
-        </form>
-        <div className="flex items-center justify-between mt-5">
-          <p className="text-gray-500">Don't have an account?</p>
-          <Link to="/sign-up" className="text-blue-700 hover:underline">
-            Sign up
-          </Link>
+            <button
+              disabled={loading}
+              className="bg-blue-700 text-white p-3 rounded-lg uppercase hover:bg-blue-800 disabled:opacity-80 transition"
+            >
+              {loading ? "Loading..." : "Sign In"}
+            </button>
+            <OAuth />
+          </form>
+          <div className="flex items-center justify-between mt-5">
+            <p className="text-gray-500">Don't have an account?</p>
+            <Link to="/sign-up" className="text-blue-700 hover:underline">
+              Sign up
+            </Link>
+          </div>
+          {error && <p className="text-red-500 mt-5">{error}</p>}
         </div>
-        {error && <p className="text-red-500 mt-5">{error}</p>}
       </div>
-    </div>
-  </>
+    </>
   );
 }

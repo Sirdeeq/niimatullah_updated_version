@@ -2,7 +2,7 @@ import React from "react";
 
 const Modal = ({ closeModal, title, children }) => {
   return (
-    <div className="fixed px-5 bottom-0 left-0 w-full flex items-end justify-start">
+    <div className="flex flex-col max-w-md gap-2 rounded-md shadow-md">
       <div
         className="modal-overlay bg-black bg-opacity-50 w-full h-full"
         onClick={closeModal}

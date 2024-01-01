@@ -56,7 +56,7 @@ export default function Home() {
   }, []);
 
   const openWhatsAppModal = () => {
-    setShowWhatsAppModal(true);
+    setShowWhatsAppModal(!showWhatsAppModal);
   };
 
   const handleWhatsAppClick = (number) => {
@@ -68,7 +68,7 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      setIsWhatsAppFixed(scrollPosition > 200); 
+      setIsWhatsAppFixed(scrollPosition > 200);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -208,16 +208,30 @@ export default function Home() {
             title="Live Chat"
             closeModal={() => setShowWhatsAppModal(false)}
           >
-            <h2>Choose a number:</h2>
-            <button onClick={() => handleWhatsAppClick("+2347010006368")}>
-              Number 1
-            </button>
-            <button onClick={() => handleWhatsAppClick("+234802799992")}>
-              Number 2
-            </button>
-            <button onClick={() => handleWhatsAppClick("+2349068420891")}>
-              Number 3
-            </button>
+            <h2 className="mb-4">Choose a number:</h2>
+            <div className="button-group flex gap-1 flex-col">
+              <button
+                onClick={() => handleWhatsAppClick("+2347010006368")}
+                className="flex items-center p-2 bg-blue-500 text-white rounded-lg"
+              >
+                <FaWhatsapp className="text-2xl mr-2" />
+                Agent 1
+              </button>
+              <button
+                onClick={() => handleWhatsAppClick("+2348027999992")}
+                className="flex items-center p-2 bg-green-500 text-white rounded-lg"
+              >
+                <FaWhatsapp className="text-2xl mr-2" />
+                Agent 2
+              </button>
+              <button
+                onClick={() => handleWhatsAppClick("+2349068420891")}
+                className="flex items-center p-2 bg-red-500 text-white rounded-lg"
+              >
+                <FaWhatsapp className="text-2xl mr-2" />
+                Agent 3
+              </button>
+            </div>
           </Modal>
         )}
       </div>
