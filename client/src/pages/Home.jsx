@@ -12,9 +12,6 @@ import logo from "../assets/imgs/logo.png";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
-  const [selectedNumber, setSelectedNumber] = useState(null);
-  const [isWhatsAppFixed, setIsWhatsAppFixed] = useState(false);
   const user = useSelector((state) => state.user);
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
@@ -195,7 +192,7 @@ export default function Home() {
         )}
       </div>
 
-      <div
+      {/* <div
         className={`fixed bottom-8 right-8 flex flex-col gap-4 z-50 ${
           isWhatsAppFixed ? "hidden" : ""
         }`}
@@ -234,7 +231,7 @@ export default function Home() {
             </div>
           </Modal>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
